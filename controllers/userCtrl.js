@@ -149,4 +149,56 @@ const unblockuser = async(req, res) => {
   }
 }
 
-module.exports = { createUser, loginUser, getAllUsers, getSingleUser, deleteUser, updateUser, blockuser, unblockuser, handleRefreshToken, handleLogOut };
+const updatePassword = async(req, res) => {
+  const {_id} = req.user;
+  const {password} = req.body;
+  const user = await userModel.findById(_id)
+  if(password) {
+    user.password = password
+    const updatedUser = await user.save();
+    res.json(updatedUser)
+  } else {
+    res.json(user)
+  }
+}
+
+const forgotPassword = async(req, res) => {
+  const {email} = req.body;
+  const user = await userModel.find({email})
+  if(user) {
+    try {
+      const token = await userModel.createPasswordResetToken()
+      await user.save()
+      const resetUrl = `Hi, please follow this link to reset your password. The link is valid for 10 minutes only. <a href="http://localhost:5000/api/user/reset-password/${token}" target="_blank">Click here</a>`
+      // const data = {
+      //   to: email,
+      //   text: "Hey User",
+      //   subject: "Forgot Password Link",
+      //   htm: resetURL,
+      // };
+      // sendEmail(data);
+      res.json(token)
+    } catch (error) {
+      throw new Error(error)
+    }
+  } else {
+    throw new Error('No user found')
+  }
+}
+
+const resetPasword = async(req, res) => {
+  const token = req.params.token;
+  const password = req.body.password;
+  const user = await userModel.findOne({
+    passwordResetToken: token,
+    passwordResetExpires: {$gt: Date.now()}
+  })
+  if(!user) throw new Error('Token is expired. Please try again')
+  user.password = password;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+  res.json(user)
+}
+
+module.exports = { createUser, loginUser, getAllUsers, getSingleUser, deleteUser, updateUser, blockuser, unblockuser, handleRefreshToken, handleLogOut, updatePassword, forgotPassword, resetPasword };
