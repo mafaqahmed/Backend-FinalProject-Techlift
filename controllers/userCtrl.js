@@ -257,6 +257,16 @@ const resetPasword = async (req, res) => {
   res.json(user);
 };
 
+const getWishlist = async (req, res) => {
+  try {
+    const {_id} = req.user;
+    let findUser = await userModel.findById(_id).populate('wishlist')
+    res.json(findUser)
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 module.exports = {
   createUser,
   loginUser,
@@ -272,4 +282,5 @@ module.exports = {
   forgotPassword,
   resetPasword,
   loginAdmin,
+  getWishlist,
 };
