@@ -41,7 +41,7 @@ var userSchema = new mongoose.Schema({
     refreshToken:{
         type:String,
     },
-    address: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
+    address: String,
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "product" }],
     passwordChangedAt: Date,
     passwordResetToken: String,

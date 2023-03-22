@@ -267,6 +267,22 @@ const getWishlist = async (req, res) => {
   }
 }
 
+const saveAddress = async (req, res) => {
+  try {
+    const {_id} = req.user;
+    let findUser = await userModel.findByIdAndUpdate(_id,
+      {
+        address: req.body.address
+      },
+      {
+        new: true,
+      })
+    res.json(findUser)
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 module.exports = {
   createUser,
   loginUser,
@@ -283,4 +299,5 @@ module.exports = {
   resetPasword,
   loginAdmin,
   getWishlist,
+  saveAddress,
 };
