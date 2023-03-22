@@ -6,6 +6,7 @@ const productRouter = require('./routes/productRoute');
 const blogRouter = require('./routes/blogRoute');
 const prodcategoryRouter = require('./routes/prodcategoryRoute');
 const blogcategoryRouter = require('./routes/blogcategoryRoute');
+const brandRouter = require('./routes/brandRoute');
 const {handleError, notFound} = require('./middlewares/errorHandler');
 const env = require('dotenv').config();
 const cookieParser = require('cookie-parser');
@@ -24,6 +25,7 @@ app.use('/api/product', productRouter)
 app.use('/api/blog', blogRouter)
 app.use('/api/category', prodcategoryRouter)
 app.use('/api/blogcategory', blogcategoryRouter)
+app.use('/api/brand', brandRouter)
 
 app.use(notFound)
 app.use(handleError)
