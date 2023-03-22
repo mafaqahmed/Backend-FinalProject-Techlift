@@ -150,15 +150,20 @@ const unblockuser = async(req, res) => {
 }
 
 const updatePassword = async(req, res) => {
-  const {_id} = req.user;
-  const {password} = req.body;
-  const user = await userModel.findById(_id)
-  if(password) {
-    user.password = password
-    const updatedUser = await user.save();
-    res.json(updatedUser)
-  } else {
-    res.json(user)
+  try {
+    const {_id} = req.user;
+    const {password} = req.body;
+    validateMongoDbId(_id)
+    const user = await userModel.findById(_id)
+    if(password) {
+      user.password = password
+      const updatedUser = await user.save();
+      res.json(updatedUser)
+    } else {
+      res.json(user)
+    }
+  } catch (error) {
+    throw new Error(error)
   }
 }
 

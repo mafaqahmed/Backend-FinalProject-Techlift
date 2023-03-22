@@ -68,7 +68,7 @@ var userSchema = new mongoose.Schema({
             comment: String,
             postedby: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'user'
+                ref: 'users'
             }
         }
     ],
