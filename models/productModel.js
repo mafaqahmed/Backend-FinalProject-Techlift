@@ -72,7 +72,7 @@ var userSchema = new mongoose.Schema({
             }
         }
     ],
-    totalratings: {
+    totalrating: {
         type: String,
         default: 0
     }
