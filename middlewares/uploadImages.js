@@ -58,6 +58,7 @@ const blogImgResize = async (req, res, next) => {
         fs.unlinkSync(`public/images/blogs/${file.filename}`);
       })
     );
+    next()
   }
 };
 

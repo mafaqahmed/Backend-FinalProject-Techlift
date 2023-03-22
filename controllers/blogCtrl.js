@@ -161,10 +161,11 @@ const uploadImage = async (req, res) => {
       const { path } = file;
       const url = await cloudinaryUploadImg(path, "images");
       imgs.push(url);
+      fs.unlinkSync(path)
     }
     const blogId = req.params.id;
     const blog = await Blog.findByIdAndUpdate(
-      prodId,
+      blogId,
       {
         images: imgs.map((img) => img),
       },
