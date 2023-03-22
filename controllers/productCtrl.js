@@ -3,6 +3,8 @@ require("express-async-errors");
 const slugify = require("slugify");
 const validateMongoDbId = require("../utils/validateMongoDbId");
 const userModel = require("../models/userModel");
+const { cloudinaryUploadImg } = require("../utils/cloudinary");
+const fs = require('fs')
 
 const createProduct = async (req, res) => {
   try {
@@ -184,6 +186,29 @@ const ratings = async (req, res) => {
   }
 };
 
+const uploadImage = async (req, res) => {
+  let imgs = [];
+  try {
+    for (const file of req.files) {
+      const { path } = file;
+      const url = await cloudinaryUploadImg(path, "images");
+      imgs.push(url);
+      fs.unlinkSync(path)
+    }
+    const prodId = req.params.id;
+    const product = await Product.findByIdAndUpdate(
+      prodId,
+      {
+        images: imgs.map((img) => img),
+      },
+      { new: true }
+    );
+    res.json(product);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   createProduct,
   getaProduct,
@@ -192,4 +217,5 @@ module.exports = {
   deleteProduct,
   addToWishList,
   ratings,
+  uploadImage,
 };
