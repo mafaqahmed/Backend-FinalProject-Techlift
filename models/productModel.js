@@ -21,12 +21,9 @@ var userSchema = new mongoose.Schema({
         type:Boolean,
         required:true,
     },
-    originalPrice:{
+    price:{
         type:Number,
         required:true,
-    },
-    discountedPrice:{
-        type:Number,
     },
     category:{
         type:String,
